@@ -16,19 +16,32 @@ aliases:
 commands:
   dependencies:
     description: "Download dependencies and setup global packages"
+    parameters:
+      shell:
+        type: string
+        default: "/bin/bash --login -eo pipefail"
     steps:
       - checkout
       - run:
           name: Download deps
+          shell: << parameters.shell >>
           command: pub get
       - run:
           name: Get junitreporter
+          shell: << parameters.shell >>
           command: pub global activate junitreport
 
   native-build:
     description: "Runs the dart2native command to build native executable for machine. Artifacts executable"
+    parameters:
+      shell:
+        type: string
+        default: "/bin/bash --login -eo pipefail"
     steps:
-      - run: dart2native bin/circleci_dart_demo.dart
+      - run:
+          name: Native compile
+          shell: << parameters.shell >>
+          command: dart2native bin/circleci_dart_demo.dart
       - store_artifacts:
           path: bin/circleci_dart_demo.exe
 
@@ -86,8 +99,10 @@ jobs:
       - run:
           name: Install Dart SDK
           command: choco install dart-sdk
-      - dependencies
-      - native-build
+      - dependencies:
+          shell: "powershell.exe"
+      - native-build:
+          shell: "powershell.exe"
 
   build-linux:
     machine: true
@@ -109,8 +124,6 @@ jobs:
             # Set PATH in profile for downstream commands
             echo 'export PATH="$PATH:/usr/lib/dart/bin"' >> ~/.profile
 
-      - dependencies:
-          shell: /bin/bash -eol pipefail
-      - native-build:
-          shell: /bin/bash -eol pipefail
+      - dependencies
+      - native-build
 
