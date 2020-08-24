@@ -111,7 +111,7 @@ jobs:
     steps:
       - run:
           name: Install Dart SDK
-          shell: /bin/bash -eol pipefail
+          shell: /bin/bash --login -eo pipefail
           command: |
             # Setup repo & signing key
             sudo apt update
@@ -125,7 +125,6 @@ jobs:
 
             # Set PATH in profile for downstream commands
             echo 'export PATH="$PATH:/usr/lib/dart/bin"' >> ~/.profile
-
       - dependencies
       - native-build
 
