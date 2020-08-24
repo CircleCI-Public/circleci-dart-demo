@@ -4,15 +4,26 @@ version: 2.1
 #####################
 # Common Definitions
 #####################
+
+# Orb declarations
+orbs:
+  win: circleci/windows@2.4.0
+
 # Simple YAML anchors
 aliases:
   - &project_dir "~/project"
 
-# Executors
-executors:
-  dart-exec:
-    docker:
-      - image: google/dart:2.9.1
+commands:
+  dependencies:
+    description: "Download dependencies and setup global packages"
+    steps:
+      - checkout
+      - run:
+          name: Download deps
+          command: pub get
+      - run:
+          name: Get junitreporter
+          command: pub global activate junitreport
 
 ######################
 # Workflow Definition
@@ -22,21 +33,25 @@ workflows:
   test-and-build:
     jobs:
       - test
+      - build-mac:
+          requires:
+            - test
+      - build-windows:
+          requires:
+            - test
+      - build-linux:
+          requires:
+            - test
 
 ##################
 # Job Definitions
 ##################
 jobs:
   test:
-    executor: dart-exec
+    docker:
+      - image: google/dart:2.9.1
     steps:
-      - checkout
-      - run:
-          name: Download deps
-          command: pub get
-      - run:
-          name: Get junitreporter
-          command: pub global activate junitreport
+      - dependencies
       - run:
           name: Make folder for test results
           command: mkdir -p test-results/dart-tests
@@ -46,3 +61,42 @@ jobs:
       - store_test_results:
           path: test-results
 
+  build-mac:
+    macos:
+      xcode: "11.3.0"
+    steps:
+      - run:
+          name: Install Dart SDK
+          command: |
+            brew tap dart-lang/dart
+            brew install dart
+      - dependencies
+
+  build-windows:
+    executor: win/default
+    steps:
+      - run:
+          name: Install Dart SDK
+          command: choco install dart-sdk
+      - dependencies
+
+  build-linux:
+    machine: true
+    steps:
+      - run:
+          name: Install Dart SDK
+          command: |
+            # Setup repo & signing key
+            sudp apt update
+            sudo apt install apt-transport-https
+            sudo sh -c 'wget -qO- https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -'
+            sudo sh -c 'wget -qO- https://storage.googleapis.com/download.dartlang.org/linux/debian/dart_stable.list > /etc/apt/sources.list.d/dart_stable.list'
+
+            # Update again and install
+            sudo apt update
+            sudo apt install dart
+
+            # Set PATH in profile for downstream commands
+            echo 'export PATH="$PATH:/usr/lib/dart/bin"' >> ~/.profile
+
+      - dependencies
