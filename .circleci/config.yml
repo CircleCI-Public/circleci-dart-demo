@@ -29,6 +29,8 @@ commands:
     description: "Runs the dart2native command to build native executable for machine. Artifacts executable"
     steps:
       - run: dart2native bin/circleci_dart_demo.dart
+      - store_artifacts:
+          path: bin/circleci_dart_demo.exe
 
 ######################
 # Workflow Definition
@@ -107,5 +109,8 @@ jobs:
             # Set PATH in profile for downstream commands
             echo 'export PATH="$PATH:/usr/lib/dart/bin"' >> ~/.profile
 
-      - dependencies
-      - native-build
+      - dependencies:
+          shell: /bin/bash -eol pipefail
+      - native-build:
+          shell: /bin/bash -eol pipefail
+
