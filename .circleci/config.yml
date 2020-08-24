@@ -34,4 +34,7 @@ jobs:
       - run:
           name: Download deps
           command: pub get
+      - run:
+          name: Run tests
+          command: pub run test
 
