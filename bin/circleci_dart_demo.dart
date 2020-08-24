@@ -2,24 +2,75 @@
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 
-// Replies "Hello, world!" to all requests.
-// Use the URL localhost:4040 in your browser.
-// #docregion
+// Use the client program, number_guesser.dart to automatically make guesses.
+// Or, you can manually guess the number using the URL localhost:4045/?q=#,
+// where # is your guess.
+// Or, you can use the make_a_guess.html UI.
+
+// #docregion main
 import 'dart:io';
+import 'dart:math' show Random;
+
+Random intGenerator = Random();
+int myNumber = intGenerator.nextInt(10);
 
 Future main() async {
-  // #docregion bind
-  var server = await HttpServer.bind(
-    InternetAddress.loopbackIPv4,
-    4040,
-  );
-  // #enddocregion bind
-  print('Listening on localhost:${server.port}');
+  print("I'm thinking of a number: $myNumber");
 
-  // #docregion listen
-  await for (HttpRequest request in server) {
-    request.response.write('Hello, world!');
-    await request.response.close();
+  HttpServer server = await HttpServer.bind(
+    InternetAddress.loopbackIPv4,
+    4041,
+  );
+  await for (var request in server) {
+    handleRequest(request);
   }
-  // #enddocregion listen
+}
+// #enddocregion main
+
+// #docregion handleRequest
+void handleRequest(HttpRequest request) {
+  try {
+    // #docregion request-method
+    if (request.method == 'GET') {
+      handleGet(request);
+    } else {
+      // #enddocregion handleRequest
+      request.response
+        ..statusCode = HttpStatus.methodNotAllowed
+        ..write('Unsupported request: ${request.method}.')
+        ..close();
+      // #docregion handleRequest
+    }
+    // #enddocregion request-method
+  } catch (e) {
+    print('Exception in handleRequest: $e');
+  }
+  print('Request handled.');
+}
+// #enddocregion handleRequest
+
+// #docregion handleGet, statusCode, uri, write
+void handleGet(HttpRequest request) {
+  // #enddocregion write
+  final guess = request.uri.queryParameters['q'];
+  // #enddocregion uri
+  final response = request.response;
+  response.statusCode = HttpStatus.ok;
+  // #enddocregion statusCode
+  // #docregion write
+  if (guess == myNumber.toString()) {
+    response
+      ..writeln('true')
+      ..writeln("I'm thinking of another number.")
+      ..close();
+    // #enddocregion write
+    myNumber = intGenerator.nextInt(10);
+    print("I'm thinking of another number: $myNumber");
+  } else {
+    response
+      ..writeln('false')
+      ..close();
+    // #docregion write
+  }
+  // #docregion statusCode, uri
 }
