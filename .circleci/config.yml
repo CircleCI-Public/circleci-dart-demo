@@ -25,6 +25,11 @@ commands:
           name: Get junitreporter
           command: pub global activate junitreport
 
+  native-build:
+    description: "Runs the dart2native command to build native executable for machine. Artifacts executable"
+    steps:
+      - run: dart2native bin/circleci_dart_demo.dart
+
 ######################
 # Workflow Definition
 ######################
@@ -71,6 +76,7 @@ jobs:
             brew tap dart-lang/dart
             brew install dart
       - dependencies
+      - native-build
 
   build-windows:
     executor: win/default
@@ -79,15 +85,17 @@ jobs:
           name: Install Dart SDK
           command: choco install dart-sdk
       - dependencies
+      - native-build
 
   build-linux:
     machine: true
     steps:
       - run:
           name: Install Dart SDK
+          shell: /bin/bash -eol pipefail
           command: |
             # Setup repo & signing key
-            sudp apt update
+            sudo apt update
             sudo apt install apt-transport-https
             sudo sh -c 'wget -qO- https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -'
             sudo sh -c 'wget -qO- https://storage.googleapis.com/download.dartlang.org/linux/debian/dart_stable.list > /etc/apt/sources.list.d/dart_stable.list'
@@ -100,3 +108,4 @@ jobs:
             echo 'export PATH="$PATH:/usr/lib/dart/bin"' >> ~/.profile
 
       - dependencies
+      - native-build
