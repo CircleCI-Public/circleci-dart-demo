@@ -35,6 +35,14 @@ jobs:
           name: Download deps
           command: pub get
       - run:
+          name: Get junitreporter
+          command: pub global activate junitreport
+      - run:
+          name: Make folder for test results
+          command: mkdir -p test-results/dart-tests
+      - run:
           name: Run tests
-          command: pub run test
+          command: pub run test --reporter json | tojunit --output test-results/dart-tests/circleci_dart_demo_test-report.xml
+      - store_test_results:
+          path: test-results
 
