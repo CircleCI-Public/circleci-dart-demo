@@ -1,0 +1,37 @@
+# Author @mvxt
+version: 2.1
+
+#####################
+# Common Definitions
+#####################
+# Simple YAML anchors
+aliases:
+  - &project_dir "~/project"
+
+# Executors
+executors:
+  dart-exec:
+    docker:
+      - google/dart:2.9.1
+
+######################
+# Workflow Definition
+######################
+workflows:
+  version: 2.1
+  test-and-build:
+    jobs:
+      - test
+
+##################
+# Job Definitions
+##################
+jobs:
+  test:
+    executor: dart-exec
+    steps:
+      - checkout
+      - run:
+          name: Download deps
+          command: pub get
+
