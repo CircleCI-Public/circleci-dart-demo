@@ -137,6 +137,7 @@ jobs:
       - image: cimg/base:2020.08
     steps:
       - setup_remote_docker
+      - checkout
       - run:
           name: Build & tag Docker image
           command: docker build -t ${DOCKER_TAG} -t ${DOCKER_TAG}:${CIRCLECI_SHA1} .
