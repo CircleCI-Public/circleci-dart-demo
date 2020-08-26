@@ -32,15 +32,15 @@ Modify as needed for your use case.
 The CircleCI config does the following:
 
 1. It runs the tests on a Docker container.
-  - This job uses the `google/dart` Docker image (CircleCI doesn't currently have a native Dart docker convenience image).
-  - The tests uses the [junitreporter](https://pub.dev/packages/junitreport) package to produce JUnit XML output for CircleCI's [test metadata feature](https://circleci.com/docs/2.0/collect-test-data/), which in turn supports things like test summary and insights data/metrics.
+    - This job uses the `google/dart` Docker image (CircleCI doesn't currently have a native Dart docker convenience image).
+    - The tests uses the [junitreporter](https://pub.dev/packages/junitreport) package to produce JUnit XML output for CircleCI's [test metadata feature](https://circleci.com/docs/2.0/collect-test-data/), which in turn supports things like test summary and insights data/metrics.
 1. After tests run, it builds executables for deployment:
-  - One job uses Google's recommended `dart-runtime` image to build a production container and pushes to Dockerhub.
-  - The other three jobs compile native executables on macOS, Windows, and Linux VMs.
+    - One job uses Google's recommended `dart-runtime` image to build a production container and pushes to Dockerhub.
+    - The other three jobs compile native executables on macOS, Windows, and Linux VMs.
 1. All jobs use dependency caching. The jobs cache according to the `pubspec.lock` and the `arch` of the system.
-  - `~/.pub-cache` and `.dart_tool` folders are cached. `~/AppData/Local/Pub/Cache` if Windows.
-  - This demo project doesn't download enough dependencies to show any discernable performance benefit, but it's there as an example. Larger projects that download many hundreds of MB of dependencies should see greater performance and speed gains.
-  - For Dart projects that have it, you'll probably also want to cache the `.packages` folder in the project directory.
+    - `~/.pub-cache` and `.dart_tool` folders are cached. `~/AppData/Local/Pub/Cache` if Windows.
+    - This demo project doesn't download enough dependencies to show any discernable performance benefit, but it's there as an example. Larger projects that download many hundreds of MB of dependencies should see greater performance and speed gains.
+    - For Dart projects that have it, you'll probably also want to cache the `.packages` folder in the project directory.
 
 For more resources, see below:
 - [Getting Started](https://circleci.com/docs/2.0/getting-started/#section=getting-started)
