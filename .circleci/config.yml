@@ -41,9 +41,9 @@ commands:
       - run:
           name: Native compile
           shell: << parameters.shell >>
-          command: dart2native bin/circleci_dart_demo.dart
+          command: dart2native bin/server.dart -o circleci_dart_demo.exe
       - store_artifacts:
-          path: bin/circleci_dart_demo.exe
+          path: circleci_dart_demo.exe
 
 ######################
 # Workflow Definition
