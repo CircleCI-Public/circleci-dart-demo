@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:test/test.dart';
 import '../bin/number_guesser.dart' as number_guesser;
-import '../bin/circleci_dart_demo.dart' as number_thinker;
+import '../bin/server.dart' as number_thinker;
 
 void main() {
 
@@ -13,7 +13,7 @@ void main() {
 
   test('number_thinker response', () {
     _test() async {
-      expect(await getUrl('localhost', 4041), anyOf('true\n', 'false\n'));
+      expect(await getUrl('localhost', 8080), anyOf('true\n', 'false\n'));
     }
 
     expect(

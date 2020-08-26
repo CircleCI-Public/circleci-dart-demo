@@ -3,7 +3,7 @@
 // BSD-style license that can be found in the LICENSE file.
 
 // Use the client program, number_guesser.dart to automatically make guesses.
-// Or, you can manually guess the number using the URL localhost:4045/?q=#,
+// Or, you can manually guess the number using the URL localhost:8080/?q=#,
 // where # is your guess.
 // Or, you can use the make_a_guess.html UI.
 
@@ -18,8 +18,8 @@ Future main() async {
   print("I'm thinking of a number: $myNumber");
 
   HttpServer server = await HttpServer.bind(
-    InternetAddress.loopbackIPv4,
-    4041,
+    InternetAddress.anyIPv4,
+    8080,
   );
   await for (var request in server) {
     handleRequest(request);
