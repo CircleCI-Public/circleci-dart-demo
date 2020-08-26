@@ -20,6 +20,9 @@ commands:
       shell:
         type: string
         default: "/bin/bash --login -eo pipefail"
+      pub-cache:
+        type: string
+        default: "~/.pub-cache"
     steps:
       - checkout
       - restore_cache:
@@ -38,7 +41,7 @@ commands:
           key: v1-dependencies-{{ arch }}-{{ checksum "pubspec.lock" }}
           paths:
             - .dart_tool
-            - ~/.pub-cache
+            - << parameters.pub-cache >>
 
   native-build:
     description: "Runs the dart2native command to build native executable for machine. Artifacts executable"
@@ -84,8 +87,7 @@ jobs:
     docker:
       - image: google/dart:2.9.1
     steps:
-      - dependencies:
-          shell: "/bin/bash -eo pipefail"
+      - dependencies
       - run:
           name: Make folder for test results
           command: mkdir -p test-results/dart-tests
@@ -115,6 +117,7 @@ jobs:
           command: choco install dart-sdk
       - dependencies:
           shell: "powershell.exe"
+          pub-cache: '%LOCALAPPDATA%\Pub\Cache'
       - native-build:
           shell: "powershell.exe"
 
