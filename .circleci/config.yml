@@ -105,8 +105,8 @@ jobs:
       - run:
           name: Install Dart SDK
           command: |
-            brew tap dart-lang/dart
-            brew install dart
+            HOMEBREW_NO_AUTO_UPDATE=1 brew tap dart-lang/dart
+            HOMEBREW_NO_AUTO_UPDATE=1 brew install dart
       - dependencies
       - native-build
 
