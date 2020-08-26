@@ -5,6 +5,15 @@ Demo repository using Dart lang by Google. Cherry-picks `number_guesser` and `nu
 ## Prerequisites
 1. Make sure [Dart is installed and configured](https://dart.dev/get-dart) on your system.
 1. Install the `webdev` Dart package globally with `pub global activate webdev`.
+1. If forking project and building in CircleCI, this project assumes you have [a context](https://circleci.com/docs/2.0/contexts/) called `dart-docker` with the following variables & keys:
+
+KEY           | VALUE
+--------------|-----------------------------------
+DOCKER_TAG    | The tag/repository for your image
+DOCKER_LOGIN  | Your Docker login
+DOCKER_PWD    | Your Docker password
+
+Modify as needed for your use case.
 
 ## Running Locally
 1. Clone this project.
@@ -23,6 +32,12 @@ Demo repository using Dart lang by Google. Cherry-picks `number_guesser` and `nu
 The CircleCI config does the following:
 
 1. It runs the tests on a Docker container.
-1. Then it uses a multi-stage Dockerfile to produce a tiny image with the final executable.
+1. Then it uses Google's recommended `dart-runtime` image to build a production container and pushes to Dockerhub.
 1. It also compiles native executables on macOS, Windows, and a Linux VM.
 
+For more resources, see below:
+- [Getting Started](https://circleci.com/docs/2.0/getting-started/#section=getting-started)
+- [Migrating to CircleCI](https://circleci.com/docs/2.0/migration-intro/#section=getting-started)
+- [Deploying on CircleCI](https://circleci.com/docs/2.0/deployment-integrations/#section=deployment)
+- [Using Contexts](https://circleci.com/docs/2.0/contexts/)
+- [Configuration Reference](https://circleci.com/docs/2.0/configuration-reference/#section=configuration)

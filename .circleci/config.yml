@@ -62,6 +62,10 @@ workflows:
       - build-linux:
           requires:
             - test
+      - build-docker:
+          context: dart-docker
+          requires:
+            - test
 
 ##################
 # Job Definitions
@@ -127,4 +131,19 @@ jobs:
             echo "export PATH=$PATH:/usr/lib/dart/bin" >> $BASH_ENV
       - dependencies
       - native-build
+
+  build-docker:
+    docker:
+      - image: cimg/base:2020.08
+    steps:
+      - setup_remote_docker
+      - run:
+          name: Build & tag Docker image
+          command: docker build -t ${DOCKER_TAG} -t ${DOCKER_TAG}:${CIRCLECI_SHA1} .
+      - run:
+          name: Login to DockerHub and push
+          command: |
+            echo $DOCKER_PWD | docker login -u $DOCKER_LOGIN --password-stdin
+            docker push ${DOCKER_TAG}
+            docker push ${DOCKER_TAG}:${CIRCLE_SHA1}
 
