@@ -27,8 +27,8 @@ commands:
       - checkout
       - restore_cache:
           keys:
-            - v1.1-dependencies-{{ arch }}-{{ checksum "pubspec.lock" }}
-            - v1.1-dependencies-{{ arch }}-
+            - v1.2-dependencies-{{ arch }}-{{ checksum "pubspec.lock" }}
+            - v1.2-dependencies-{{ arch }}-
       - run:
           name: Download deps
           shell: << parameters.shell >>
@@ -38,7 +38,7 @@ commands:
           shell: << parameters.shell >>
           command: pub global activate junitreport
       - save_cache:
-          key: v1.1-dependencies-{{ arch }}-{{ checksum "pubspec.lock" }}
+          key: v1.2-dependencies-{{ arch }}-{{ checksum "pubspec.lock" }}
           paths:
             - .dart_tool
             - << parameters.pub-cache >>
@@ -118,7 +118,7 @@ jobs:
           command: choco install dart-sdk
       - dependencies:
           shell: "powershell.exe"
-          pub-cache: '%LOCALAPPDATA%\Pub\Cache'
+          pub-cache: "$LOCALAPPDATA/Pub/Cache"
       - native-build:
           shell: "powershell.exe"
 
