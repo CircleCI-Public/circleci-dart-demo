@@ -18,11 +18,11 @@ Modify as needed for your use case.
 ## Running Locally
 1. Clone this project.
 1. Run `pub get` to download dependencies.
-1. `pub run bin/circleci_dart_demo.dart` to run the number thinker server.
-1. `webdev serve` in another terminal at the project root to serve the basic webpage at https://localhost:8080. Basic dropdown and button to send guess API requests to the server.
+1. `pub run bin/server.dart` to run the number thinker server. It listens at https://localhost:8080
+1. `webdev serve web:8181` in another terminal at the project root to serve the basic webpage at https://localhost:8181. It's just a basic webpage with dropdown and button to send guess API requests to the server.
 
 ## Testing
-1. Run `pub run test` to test the `circleci_dart_demo` and `number_guesser` server executables.
+1. Run `pub run test` to test the `server` and `number_guesser`.
 
 ## Building
 1. `webdev build` compiles the web client (just an `index.html`).
@@ -32,8 +32,15 @@ Modify as needed for your use case.
 The CircleCI config does the following:
 
 1. It runs the tests on a Docker container.
-1. Then it uses Google's recommended `dart-runtime` image to build a production container and pushes to Dockerhub.
-1. It also compiles native executables on macOS, Windows, and a Linux VM.
+  - This job uses the `google/dart` Docker image (CircleCI doesn't currently have a native Dart docker convenience image).
+  - The tests uses the [junitreporter](https://pub.dev/packages/junitreport) package to produce JUnit XML output for CircleCI's [test metadata feature](https://circleci.com/docs/2.0/collect-test-data/), which in turn supports things like test summary and insights data/metrics.
+1. After tests run, it builds executables for deployment:
+  - One job uses Google's recommended `dart-runtime` image to build a production container and pushes to Dockerhub.
+  - The other three jobs compile native executables on macOS, Windows, and Linux VMs.
+1. All jobs use dependency caching. The jobs cache according to the `pubspec.lock` and the `arch` of the system.
+  - `~/.pub-cache` and `.dart_tool` folders are cached. `~/AppData/Local/Pub/Cache` if Windows.
+  - This demo project doesn't download enough dependencies to show any discernable performance benefit, but it's there as an example. Larger projects that download many hundreds of MB of dependencies should see greater performance and speed gains.
+  - For Dart projects that have it, you'll probably also want to cache the `.packages` folder in the project directory.
 
 For more resources, see below:
 - [Getting Started](https://circleci.com/docs/2.0/getting-started/#section=getting-started)
