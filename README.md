@@ -1,4 +1,5 @@
-# circleci-dart-demo
+# circleci-dart-demo [![CircleCI](https://circleci.com/gh/mvxt/circleci-dart-demo.svg?style=shield)](https://app.circleci.com/pipelines/github/mvxt/circleci-dart-demo)
+
 
 Demo repository using Dart lang by Google. Cherry-picks `number_guesser` and `number_thinker` code from [Write HTTP clients & servers](https://dart.dev/tutorials/server/httpserver) tutorial.
 
