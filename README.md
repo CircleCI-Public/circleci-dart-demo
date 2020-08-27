@@ -1,4 +1,4 @@
-# circleci-dart-demo [![CircleCI](https://circleci.com/gh/mvxt/circleci-dart-demo.svg?style=shield)](https://app.circleci.com/pipelines/github/mvxt/circleci-dart-demo)
+# circleci-dart-demo [![CircleCI](https://circleci.com/gh/CircleCI-Public/circleci-dart-demo.svg?style=shield)](https://app.circleci.com/pipelines/github/CircleCI-Public)
 
 
 Demo repository using Dart lang by Google. Cherry-picks `number_guesser` and `number_thinker` code from [Write HTTP clients & servers](https://dart.dev/tutorials/server/httpserver) tutorial.
@@ -29,13 +29,13 @@ The CircleCI config does the following:
     - This job uses the `google/dart` Docker image (CircleCI doesn't currently have a native Dart docker convenience image).
     - The tests uses the [junitreporter](https://pub.dev/packages/junitreport) package to produce JUnit XML output for CircleCI's [test metadata feature](https://circleci.com/docs/2.0/collect-test-data/), which in turn supports things like test summary and insights data/metrics.
 1. After tests run, it builds executables for deployment:
-    - One job uses Google's recommended `dart-runtime` image to build a production container and pushes to Dockerhub.
+    - One job uses Google's recommended `dart-runtime` image to build a production container. There's a section that pushes to DockerHub, but that's been commented out since we don't want to unnecessarily spam our repo with example images. It's there as an example.
     - The other three jobs compile native executables on macOS, Windows, and Linux VMs.
 1. All jobs use dependency caching. The jobs cache according to the `pubspec.lock` and the `arch` of the system.
     - `~/.pub-cache` and `.dart_tool` folders are cached. `~/AppData/Local/Pub/Cache` if Windows.
-    - This demo project doesn't download enough dependencies to show any discernable performance benefit, but it's there as an example. Larger projects that download many hundreds of MB of dependencies should see greater performance and speed gains.
+    - This demo project doesn't download enough dependencies to show any signficant performance benefit, but it's shown as an example. Larger projects that download many hundreds of MB of dependencies should see greater performance and speed gains.
     - For Dart projects that have it, you'll probably also want to cache the `.packages` folder in the project directory.
-1. If forking project and building in CircleCI, this project assumes [a context](https://circleci.com/docs/2.0/contexts/) called `dart-docker` with the following variables & keys:
+1. If you fork this project and want to push to DockerHub, this project assumes [a context](https://circleci.com/docs/2.0/contexts/) called `dart-docker` with the following variables & keys:
 
 KEY           | VALUE
 --------------|-----------------------------------
@@ -43,7 +43,7 @@ DOCKER_TAG    | The tag/repository for your image
 DOCKER_LOGIN  | Your Docker login
 DOCKER_PWD    | Your Docker password
 
-Modify as needed for your use case.
+See the config and modify as needed for your use case.
 
 For more resources, see below:
 - [Getting Started](https://circleci.com/docs/2.0/getting-started/#section=getting-started)
