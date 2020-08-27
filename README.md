@@ -3,20 +3,13 @@
 
 Demo repository using Dart lang by Google. Cherry-picks `number_guesser` and `number_thinker` code from [Write HTTP clients & servers](https://dart.dev/tutorials/server/httpserver) tutorial.
 
-## Prerequisites
+## Running Locally
+
+### Prerequisites
 1. Make sure [Dart is installed and configured](https://dart.dev/get-dart) on your system.
 1. Install the `webdev` Dart package globally with `pub global activate webdev`.
-1. If forking project and building in CircleCI, this project assumes you have [a context](https://circleci.com/docs/2.0/contexts/) called `dart-docker` with the following variables & keys:
 
-KEY           | VALUE
---------------|-----------------------------------
-DOCKER_TAG    | The tag/repository for your image
-DOCKER_LOGIN  | Your Docker login
-DOCKER_PWD    | Your Docker password
-
-Modify as needed for your use case.
-
-## Running Locally
+### Setup
 1. Clone this project.
 1. Run `pub get` to download dependencies.
 1. `pub run bin/server.dart` to run the number thinker server. It listens at https://localhost:8080
@@ -42,6 +35,15 @@ The CircleCI config does the following:
     - `~/.pub-cache` and `.dart_tool` folders are cached. `~/AppData/Local/Pub/Cache` if Windows.
     - This demo project doesn't download enough dependencies to show any discernable performance benefit, but it's there as an example. Larger projects that download many hundreds of MB of dependencies should see greater performance and speed gains.
     - For Dart projects that have it, you'll probably also want to cache the `.packages` folder in the project directory.
+1. If forking project and building in CircleCI, this project assumes [a context](https://circleci.com/docs/2.0/contexts/) called `dart-docker` with the following variables & keys:
+
+KEY           | VALUE
+--------------|-----------------------------------
+DOCKER_TAG    | The tag/repository for your image
+DOCKER_LOGIN  | Your Docker login
+DOCKER_PWD    | Your Docker password
+
+Modify as needed for your use case.
 
 For more resources, see below:
 - [Getting Started](https://circleci.com/docs/2.0/getting-started/#section=getting-started)
