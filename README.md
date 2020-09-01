@@ -1,7 +1,8 @@
 # circleci-dart-demo [![CircleCI](https://circleci.com/gh/CircleCI-Public/circleci-dart-demo.svg?style=shield)](https://app.circleci.com/pipelines/github/CircleCI-Public)
 
-
 Demo repository using Dart lang by Google. Cherry-picks `number_guesser` and `number_thinker` code from [Write HTTP clients & servers](https://dart.dev/tutorials/server/httpserver) tutorial.
+
+Visit the [Dart language guide for CircleCI](https://github.com/CircleCI-Public/circleci-dart-demo) here.
 
 ## Running Locally
 
